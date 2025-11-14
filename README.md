@@ -160,10 +160,10 @@ python src/utils/config_loader.py
 - [x] 신호 분석 엔진 (SignalAnalyzer)
 - [x] 리스크 관리 모듈 (RiskManager)
 
-### 🚧 Phase 2: 핵심 기능 (진행 중)
-- [ ] Binance Testnet API 연동
-- [ ] 거래 실행 모듈 (TradeExecutor)
-- [ ] 에러 처리 시스템
+### ✅ Phase 2: 핵심 기능 (완료)
+- [x] Binance Testnet API 연동 (BinanceClient)
+- [x] 거래 실행 모듈 (TradeExecutor)
+- [x] 에러 처리 시스템 (ErrorHandler)
 
 ### 📋 Phase 3: 모니터링
 - [ ] FastAPI 웹서버
