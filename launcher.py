@@ -68,36 +68,66 @@ class TradingLauncher:
 
         self.mode_var = tk.StringVar(value="api")
 
-        tk.Radiobutton(
+        # API 서버 모드
+        api_radio = tk.Radiobutton(
             mode_frame,
-            text="🌐 API 서버 (웹 대시보드) - http://localhost:8000",
+            text="🌐 API 서버 (웹 대시보드)",
             variable=self.mode_var,
             value="api",
-            font=("Arial", 10)
-        ).pack(anchor=tk.W, pady=5)
+            font=("Arial", 10, "bold")
+        )
+        api_radio.pack(anchor=tk.W, pady=(5, 0))
 
-        tk.Radiobutton(
+        api_desc = tk.Label(
             mode_frame,
-            text="🤖 자동 거래 모드 (백그라운드 실행)",
+            text="   → 웹 브라우저에서 http://localhost:8000 으로 모니터링\n"
+                 "   → 실시간 차트, 거래 내역, 수동 제어 가능\n"
+                 "   → 처음 사용하시면 이 모드를 선택하세요!",
+            font=("Arial", 8),
+            anchor="w",
+            justify=tk.LEFT,
+            fg="#555"
+        )
+        api_desc.pack(anchor=tk.W, pady=(0, 5))
+
+        # 자동 거래 모드
+        auto_radio = tk.Radiobutton(
+            mode_frame,
+            text="🤖 자동 거래 모드",
             variable=self.mode_var,
             value="auto",
-            font=("Arial", 10)
-        ).pack(anchor=tk.W, pady=5)
+            font=("Arial", 10, "bold")
+        )
+        auto_radio.pack(anchor=tk.W, pady=(5, 0))
+
+        auto_desc = tk.Label(
+            mode_frame,
+            text="   → 백그라운드에서 자동으로 신호 감지 & 거래 실행\n"
+                 "   → 웹 대시보드 없이 실행 (로그로만 확인)\n"
+                 "   → 장기 운영용, 충분히 테스트 후 사용하세요!",
+            font=("Arial", 8),
+            anchor="w",
+            justify=tk.LEFT,
+            fg="#555"
+        )
+        auto_desc.pack(anchor=tk.W, pady=(0, 5))
 
         # 설정 정보
-        config_frame = tk.LabelFrame(main_frame, text="설정 정보", padx=10, pady=10)
+        config_frame = tk.LabelFrame(main_frame, text="⚙️ 설정 파일 편집", padx=10, pady=10)
         config_frame.pack(fill=tk.X, pady=(0, 10))
 
         config_info = tk.Label(
             config_frame,
-            text="• API 키: .env 파일에서 설정\n"
-                 "• 전략 설정: config.yaml 파일에서 조정\n"
-                 "• Testnet 모드가 기본으로 활성화되어 있습니다",
+            text="시작하기 전에 꼭 설정하세요!\n\n"
+                 "• .env: Binance API 키 입력 (필수!)\n"
+                 "• config.yaml: 거래 전략, 리스크 설정 등\n\n"
+                 "⚠️ Testnet 모드 사용을 권장합니다 (실제 돈 없이 테스트)",
             font=("Arial", 9),
             anchor="w",
-            justify=tk.LEFT
+            justify=tk.LEFT,
+            fg="#d35400"
         )
-        config_info.pack(fill=tk.X)
+        config_info.pack(fill=tk.X, pady=(0, 10))
 
         tk.Button(
             config_frame,
@@ -179,9 +209,20 @@ class TradingLauncher:
         """환경 확인"""
         issues = []
 
-        # .env 파일 확인
+        # .env 파일 확인 및 자동 생성
         if not os.path.exists(".env"):
-            issues.append("❌ .env 파일이 없습니다")
+            if os.path.exists(".env.example"):
+                try:
+                    import shutil
+                    shutil.copy(".env.example", ".env")
+                    issues.append("✅ .env 파일 자동 생성됨 (편집 필요!)")
+                    self.log("⚠️ .env 파일을 생성했습니다. Binance API 키를 입력해주세요!")
+                    # 자동으로 편집 창 열기
+                    self.root.after(1000, self.edit_env)
+                except Exception as e:
+                    issues.append(f"❌ .env 파일 생성 실패: {e}")
+            else:
+                issues.append("❌ .env.example 파일이 없습니다")
         else:
             issues.append("✅ .env 파일 존재")
 
