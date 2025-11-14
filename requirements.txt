@@ -43,3 +43,6 @@ pytest-cov==4.1.0
 black==23.11.0
 flake8==6.1.0
 mypy==1.7.1
+
+# 패키징
+pyinstaller==6.3.0
