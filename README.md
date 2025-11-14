@@ -131,6 +131,39 @@ copytrade/
 python main.py
 ```
 
+실행 모드 선택:
+1. **API 서버 모드** - 웹 대시보드를 통해 시스템 제어
+2. **자동 거래 모드** - 백그라운드에서 자동 거래 실행
+
+### 웹 대시보드 접속
+
+API 서버 모드로 실행 후:
+```
+http://localhost:8000
+```
+
+웹 대시보드에서 제공하는 기능:
+- 실시간 시스템 상태 모니터링
+- 포지션 현황 및 PnL 확인
+- 추적 중인 트레이더 목록
+- 리스크 알림 확인
+- 시스템 제어 (시작/중지/긴급정지)
+
+### 텔레그램 봇 설정
+
+1. `.env` 파일에서 텔레그램 설정:
+```env
+TELEGRAM_BOT_TOKEN=your_bot_token
+TELEGRAM_CHAT_ID=your_chat_id
+```
+
+2. `config.yaml`에서 알림 활성화:
+```yaml
+notifications:
+  telegram:
+    enabled: true
+```
+
 ### 모듈별 테스트
 
 데이터베이스 초기화:
@@ -138,14 +171,14 @@ python main.py
 python src/database/db_manager.py
 ```
 
-로거 테스트:
+Binance API 테스트:
 ```bash
-python src/utils/logger.py
+python src/executors/binance_client.py
 ```
 
-설정 로더 테스트:
+텔레그램 봇 테스트:
 ```bash
-python src/utils/config_loader.py
+python src/notifications/telegram_bot.py
 ```
 
 ## 개발 로드맵
@@ -165,11 +198,11 @@ python src/utils/config_loader.py
 - [x] 거래 실행 모듈 (TradeExecutor)
 - [x] 에러 처리 시스템 (ErrorHandler)
 
-### 📋 Phase 3: 모니터링
-- [ ] FastAPI 웹서버
-- [ ] 웹 대시보드
-- [ ] 텔레그램 봇
-- [ ] 성과 분석 도구
+### ✅ Phase 3: 모니터링 (완료)
+- [x] FastAPI 웹서버 및 REST API
+- [x] 웹 대시보드 (HTML/CSS/JavaScript)
+- [x] 텔레그램 봇 알림 시스템
+- [x] 메인 컨트롤러 통합 시스템
 
 ### 🧪 Phase 4: 테스트 및 최적화
 - [ ] 단위 테스트
@@ -195,5 +228,5 @@ MIT License
 ---
 
 **마지막 업데이트**: 2025-01-17
-**버전**: 0.1.0 (Alpha)
-**상태**: 개발 중
+**버전**: 0.2.0 (Beta)
+**상태**: 테스트 준비 완료

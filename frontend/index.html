@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>바이낸스 카피트레이딩 시스템</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 헤더 -->
+        <header class="header">
+            <h1>🚀 바이낸스 카피트레이딩 시스템</h1>
+            <div class="header-status">
+                <span id="status-badge" class="badge badge-inactive">중지됨</span>
+                <span id="mode-badge" class="badge badge-testnet">TESTNET</span>
+            </div>
+        </header>
+
+        <!-- 시스템 제어 -->
+        <section class="control-panel">
+            <h2>시스템 제어</h2>
+            <div class="button-group">
+                <button id="btn-start" class="btn btn-success">▶ 시작</button>
+                <button id="btn-stop" class="btn btn-warning">⏸ 중지</button>
+                <button id="btn-emergency" class="btn btn-danger">🛑 긴급정지</button>
+                <button id="btn-refresh" class="btn btn-secondary">🔄 새로고침</button>
+            </div>
+        </section>
+
+        <!-- 실시간 현황 -->
+        <section class="dashboard">
+            <h2>실시간 현황</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">추적 트레이더</div>
+                    <div class="stat-value" id="tracked-traders">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">활성 포지션</div>
+                    <div class="stat-value" id="active-positions">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">오늘 PnL</div>
+                    <div class="stat-value" id="today-pnl">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">현재 잔고</div>
+                    <div class="stat-value" id="balance">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">사용 가능 잔고</div>
+                    <div class="stat-value" id="available-balance">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">미실현 PnL</div>
+                    <div class="stat-value" id="unrealized-pnl">-</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 포지션 현황 -->
+        <section class="positions">
+            <h2>포지션 현황</h2>
+            <div class="table-container">
+                <table id="positions-table">
+                    <thead>
+                        <tr>
+                            <th>심볼</th>
+                            <th>방향</th>
+                            <th>진입가</th>
+                            <th>현재가</th>
+                            <th>수량</th>
+                            <th>레버리지</th>
+                            <th>PnL (%)</th>
+                            <th>PnL (USDT)</th>
+                            <th>상태</th>
+                            <th>동작</th>
+                        </tr>
+                    </thead>
+                    <tbody id="positions-tbody">
+                        <tr>
+                            <td colspan="10" class="empty-state">포지션이 없습니다</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 리스크 알림 -->
+        <section class="alerts">
+            <h2>리스크 알림</h2>
+            <div id="alerts-container" class="alerts-list">
+                <p class="empty-state">알림이 없습니다</p>
+            </div>
+        </section>
+
+        <!-- 추적 중인 트레이더 -->
+        <section class="traders">
+            <h2>추적 중인 트레이더</h2>
+            <div class="table-container">
+                <table id="traders-table">
+                    <thead>
+                        <tr>
+                            <th>닉네임</th>
+                            <th>UID</th>
+                            <th>ROI 7일</th>
+                            <th>ROI 30일</th>
+                            <th>승률</th>
+                            <th>팔로워</th>
+                            <th>상태</th>
+                        </tr>
+                    </thead>
+                    <tbody id="traders-tbody">
+                        <tr>
+                            <td colspan="7" class="empty-state">데이터를 불러오는 중...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 푸터 -->
+        <footer class="footer">
+            <p>바이낸스 카피트레이딩 시스템 v0.2.0</p>
+            <p>마지막 업데이트: <span id="last-update">-</span></p>
+        </footer>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
