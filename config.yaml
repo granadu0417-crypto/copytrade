@@ -1,0 +1,114 @@
+# 바이낸스 카피트레이딩 시스템 설정 파일
+
+# 시스템 설정
+system:
+  mode: "testnet"  # testnet 또는 live
+  scraping_interval: 60  # 리더보드 스크래핑 주기 (초)
+  debug: true
+  auto_start: false  # 시스템 시작시 자동 거래 시작 여부
+
+# 거래 전략 설정
+strategy:
+  tracked_traders: 15  # 추적할 상위 트레이더 수
+  min_consensus: 3  # 최소 동의 트레이더 수 (거래 실행 조건)
+  time_window: 5  # 신호 유효 시간 윈도우 (분)
+  max_positions: 5  # 최대 동시 포지션 수
+  position_size_pct: 0.05  # 포지션 당 자본 비율 (5%)
+
+# 레버리지 설정
+leverage:
+  mode: "fixed"  # fixed: 고정값, average: 평균값, adaptive: 동적조정
+  fixed_value: 5  # 고정 레버리지 값
+  max_allowed: 10  # 최대 허용 레버리지
+  min_allowed: 1  # 최소 레버리지
+
+# 리스크 관리 설정
+risk:
+  max_daily_loss: 0.05  # 일일 최대 손실률 (5%)
+  max_position_loss: 0.10  # 포지션당 최대 손실률 (10%)
+  stop_loss_pct: 0.10  # 손절매 비율 (10%)
+  take_profit_pct: 0.20  # 익절매 비율 (20%)
+  trailing_stop: false  # 트레일링 스탑 사용 여부
+  trailing_stop_pct: 0.05  # 트레일링 스탑 비율 (5%)
+
+# 거래 필터 설정
+filters:
+  min_roi_7d: 10.0  # 최소 7일 ROI (%)
+  min_win_rate: 50.0  # 최소 승률 (%)
+  min_followers: 100  # 최소 팔로워 수
+  blacklist_symbols: []  # 거래 제외 심볼 목록
+  whitelist_symbols: []  # 거래 허용 심볼 목록 (비어있으면 전체 허용)
+
+# 바이낸스 API 설정 (실제 키는 .env 파일에서 로드)
+binance:
+  testnet:
+    base_url: "https://testnet.binancefuture.com"
+    ws_url: "wss://stream.binancefuture.com"
+  live:
+    base_url: "https://fapi.binance.com"
+    ws_url: "wss://fstream.binance.com"
+
+# 웹 스크래핑 설정
+scraping:
+  leaderboard_url: "https://www.binance.com/en/futures-activity/leaderboard"
+  timeout: 30  # 타임아웃 (초)
+  retry_count: 3  # 재시도 횟수
+  retry_delay: 5  # 재시도 대기시간 (초)
+  headless: true  # 헤드리스 모드 (브라우저 표시 안함)
+  user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+
+# 데이터베이스 설정
+database:
+  type: "sqlite"
+  path: "./data/trading.db"
+  backup_enabled: true
+  backup_interval: 3600  # 백업 주기 (초)
+  backup_path: "./data/backups"
+
+# 알림 설정
+notifications:
+  telegram:
+    enabled: true
+    # bot_token과 chat_id는 .env에서 로드
+    notify_on_signal: true  # 신호 발생시 알림
+    notify_on_trade: true  # 거래 실행시 알림
+    notify_on_close: true  # 포지션 청산시 알림
+    notify_on_error: true  # 에러 발생시 알림
+    notify_daily_report: true  # 일일 리포트 알림
+    daily_report_time: "09:00"  # 일일 리포트 전송 시간 (KST)
+
+# 웹 서버 설정
+webserver:
+  host: "0.0.0.0"
+  port: 8000
+  cors_origins:
+    - "http://localhost:8000"
+    - "http://127.0.0.1:8000"
+  static_files_dir: "./frontend"
+
+# 로깅 설정
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "{time:YYYY-MM-DD HH:mm:ss} | {level: <8} | {name}:{function}:{line} - {message}"
+  log_file: "./logs/trading.log"
+  rotation: "500 MB"  # 로그 파일 크기 제한
+  retention: "30 days"  # 로그 보관 기간
+  compression: "zip"  # 로그 압축 형식
+
+# 성과 추적 설정
+performance:
+  track_interval: 300  # 성과 추적 주기 (초)
+  save_to_db: true  # 데이터베이스에 저장 여부
+  metrics:
+    - "total_pnl"
+    - "win_rate"
+    - "sharpe_ratio"
+    - "max_drawdown"
+    - "total_trades"
+
+# 고급 설정
+advanced:
+  enable_monitoring: true  # 모니터링 활성화
+  health_check_interval: 60  # 헬스체크 주기 (초)
+  auto_restart_on_error: false  # 에러시 자동 재시작
+  max_restart_attempts: 3  # 최대 재시작 시도 횟수
