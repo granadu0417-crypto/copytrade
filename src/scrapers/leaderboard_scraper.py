@@ -142,14 +142,22 @@ class LeaderboardScraper:
 
         for element in trader_elements:
             try:
+                # 각 요소를 먼저 찾아서 변수에 저장
+                nickname_elem = element.select_one('.nickname')
+                roi_7d_elem = element.select_one('.roi-7d')
+                roi_30d_elem = element.select_one('.roi-30d')
+                pnl_elem = element.select_one('.pnl')
+                win_rate_elem = element.select_one('.win-rate')
+                followers_elem = element.select_one('.followers')
+
                 trader_data = {
                     'binance_uid': element.get('data-uid', ''),
-                    'nickname': element.select_one('.nickname')?.text.strip() if element.select_one('.nickname') else '',
-                    'roi_7d': self._parse_percentage(element.select_one('.roi-7d')?.text),
-                    'roi_30d': self._parse_percentage(element.select_one('.roi-30d')?.text),
-                    'pnl': self._parse_number(element.select_one('.pnl')?.text),
-                    'win_rate': self._parse_percentage(element.select_one('.win-rate')?.text),
-                    'followers': self._parse_number(element.select_one('.followers')?.text),
+                    'nickname': nickname_elem.text.strip() if nickname_elem else '',
+                    'roi_7d': self._parse_percentage(roi_7d_elem.text) if roi_7d_elem else 0.0,
+                    'roi_30d': self._parse_percentage(roi_30d_elem.text) if roi_30d_elem else 0.0,
+                    'pnl': self._parse_number(pnl_elem.text) if pnl_elem else 0.0,
+                    'win_rate': self._parse_percentage(win_rate_elem.text) if win_rate_elem else 0.0,
+                    'followers': self._parse_number(followers_elem.text) if followers_elem else 0,
                 }
                 traders.append(trader_data)
             except Exception as e:
@@ -229,16 +237,26 @@ class LeaderboardScraper:
 
             for element in position_elements:
                 try:
+                    # 각 요소를 먼저 찾아서 변수에 저장
+                    symbol_elem = element.select_one('.symbol')
+                    side_elem = element.select_one('.side')
+                    entry_price_elem = element.select_one('.entry-price')
+                    current_price_elem = element.select_one('.current-price')
+                    quantity_elem = element.select_one('.quantity')
+                    leverage_elem = element.select_one('.leverage')
+                    pnl_elem = element.select_one('.pnl')
+                    pnl_pct_elem = element.select_one('.pnl-pct')
+
                     position_data = {
                         'trader_id': None,  # DB 저장 후 업데이트
-                        'symbol': element.select_one('.symbol')?.text.strip() or '',
-                        'side': element.select_one('.side')?.text.strip() or '',
-                        'entry_price': self._parse_number(element.select_one('.entry-price')?.text),
-                        'current_price': self._parse_number(element.select_one('.current-price')?.text),
-                        'quantity': self._parse_number(element.select_one('.quantity')?.text),
-                        'leverage': int(self._parse_number(element.select_one('.leverage')?.text) or 1),
-                        'pnl': self._parse_number(element.select_one('.pnl')?.text),
-                        'pnl_percentage': self._parse_percentage(element.select_one('.pnl-pct')?.text),
+                        'symbol': symbol_elem.text.strip() if symbol_elem else '',
+                        'side': side_elem.text.strip() if side_elem else '',
+                        'entry_price': self._parse_number(entry_price_elem.text) if entry_price_elem else 0.0,
+                        'current_price': self._parse_number(current_price_elem.text) if current_price_elem else 0.0,
+                        'quantity': self._parse_number(quantity_elem.text) if quantity_elem else 0.0,
+                        'leverage': int(self._parse_number(leverage_elem.text) if leverage_elem else 1),
+                        'pnl': self._parse_number(pnl_elem.text) if pnl_elem else 0.0,
+                        'pnl_percentage': self._parse_percentage(pnl_pct_elem.text) if pnl_pct_elem else 0.0,
                         'detected_at': datetime.now(),
                     }
 
